@@ -40,7 +40,7 @@ const LoginPage = () => {
         if (response.data.role === "Admin") {
           navigate("/admin");
         } else {
-          navigate("/notes");
+          navigate("/task");
         }
 
         // Establece el nombre de usuario en el contexto de autenticación
@@ -105,7 +105,7 @@ const LoginPage = () => {
             align="center"
             style={{ marginTop: "1rem" }}
           >
-            ¿No tienes una cuenta? <Link to="/register">Regístrate aquí</Link>
+            ¿No tienes una cuenta? <Link  style={{ color: "#2979FF" }} to="/register">Regístrate aquí</Link>
           </Typography>
         </Grid>
       </Grid>

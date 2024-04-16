@@ -6,6 +6,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Button,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import axios from "axios";
@@ -43,9 +44,11 @@ const Header = () => {
     }
   };
 
+  // Configuración de la animación para el menú
   const menuAnimation = useSpring({
     opacity: anchorEl ? 1 : 0,
     transform: anchorEl ? "scale(1)" : "scale(0)",
+    config: { tension: 300, friction: 20 }, // Configuración para una animación más suave
   });
 
   return (
@@ -67,25 +70,28 @@ const Header = () => {
             <AccountCircleIcon />
           </IconButton>
         </div>
-        <animated.div style={menuAnimation}>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
-          </Menu>
-        </animated.div>
+        <div>
+          {/* Menú animado */}
+          <animated.div style={menuAnimation}>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+            </Menu>
+          </animated.div>
+        </div>
       </Toolbar>
     </AppBar>
   );

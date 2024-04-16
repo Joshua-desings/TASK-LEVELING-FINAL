@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import CssBaseline from "@mui/material/CssBaseline";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import IconButton from "@mui/material/IconButton";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useSpring, animated } from "react-spring";
 
 // Define una paleta de colores moderna y profesional para modo claro
 const lightTheme = createTheme({
@@ -86,11 +90,41 @@ const darkTheme = createTheme({
 
 // Renderiza la aplicación con los estilos personalizados utilizando ReactDOM.createRoot
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function ToggleColorMode() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const springProps = useSpring({
+    transform: isDarkMode ? "rotate(180deg)" : "rotate(0deg)",
+  });
+
+  const toggleColorMode = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
+  return (
+    <animated.div
+      style={{
+        ...springProps,
+        position: "fixed",
+        top: "1rem",
+        right: "1rem",
+        zIndex: 2000,
+      }}
+    >
+      <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+        <CssBaseline />
+        <IconButton onClick={toggleColorMode} color="inherit">
+          {isDarkMode ? <Brightness4Icon /> : <Brightness7Icon />}
+        </IconButton>
+      </ThemeProvider>
+    </animated.div>
+  );
+}
+
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={lightTheme}>
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
+    <ToggleColorMode />
+    <App />
   </React.StrictMode>
 );

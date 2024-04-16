@@ -9,7 +9,7 @@ import { useTransition, animated } from "react-spring";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import NoteManagerPage from "./pages/NoteManagerPage";
+import TaskManagerPage from "./pages/TaskManagerPage";
 import AdminPage from "./pages/AdminPage";
 import { AuthProvider, useAuth } from "./hooks/AuthContext";
 import Header from "./components/Header";
@@ -24,13 +24,13 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           {/* Ruta protegida para la administración de notas */}
           <Route
-            path="/notes"
-            element={<PrivateRoute component={<NoteManagerPage />} />}
+            path="/task"
+            element={<PrivateRoute component={TaskManagerPage} />}
           />
           {/* Ruta protegida para la página de administración */}
           <Route
             path="/admin"
-            element={<PrivateRoute component={<AdminPage />} />}
+            element={<PrivateRoute component={AdminPage} />}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
@@ -39,27 +39,25 @@ function App() {
   );
 }
 
-// Componente para proteger rutas privadas
-const PrivateRoute = ({ component }) => {
+// En PrivateRoute.jsx
+const PrivateRoute = ({ component: Component }) => {
   const { isAuthenticated } = useAuth(); // Obtiene el estado de autenticación desde el contexto
 
   // Transiciones de animación
-  const transitions = useTransition(component, {
+  const transitions = useTransition(isAuthenticated ? <Component /> : null, {
     from: { opacity: 0, transform: "translate3d(0, -40px, 0)" },
     enter: { opacity: 1, transform: "translate3d(0, 0, 0)" },
     leave: { opacity: 0, transform: "translate3d(0, -40px, 0)" },
   });
 
   // Renderiza el componente proporcionado si el usuario está autenticado, de lo contrario, redirige a la página de inicio de sesión
-  return isAuthenticated ? (
+  return (
     <>
       <Header />
       {transitions((style, item) => (
         <animated.div style={style}>{item}</animated.div>
       ))}
     </>
-  ) : (
-    <Navigate to="/login" />
   );
 };
 

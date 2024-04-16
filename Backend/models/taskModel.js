@@ -5,7 +5,7 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 100,
+    maxlength: 50,
   },
   description: {
     type: String,
@@ -13,9 +13,31 @@ const taskSchema = new mongoose.Schema({
     minlength: 0,
     maxlength: 1000,
   },
-  completed: {
-    type: Boolean,
-    default: false,
+  difficulty: {
+    type: String,
+    enum: ["E", "D", "C", "B", "A", "S"],
+  },
+  experience: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  deadline: {
+    type: Date,
+    required: false,
+  },
+  progress: {
+    type: String,
+    enum: ["pending", "in_progress", "completed"],
+    default: "pending",
+  },
+  tags: {
+    type: [String],
+    validate: {
+      validator: function (v) {
+        return v.length <= 2;
+      }
+    },
   },
   createdAt: {
     type: Date,
@@ -25,14 +47,9 @@ const taskSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Referencia al modelo de usuario si se necesita
   },
-  priority: {
-    type: String,
-    enum: ["low", "medium", "high"], // Prioridad de la tarea
-  },
-  tags: [String], // Etiquetas asociadas a la tarea
 });
 
-taskSchema.index({ createdAt: 1 }); // Índice para mejorar el rendimiento de las consultas
+taskSchema.index({ createdAt: 1 });
 
 const Task = mongoose.model("Task", taskSchema);
 
